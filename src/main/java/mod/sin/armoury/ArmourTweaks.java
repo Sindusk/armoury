@@ -14,7 +14,7 @@ import com.wurmonline.server.items.Materials;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import mod.sin.lib.Util;
+import main.java.armoury.mod.sin.lib.Util;
 
 public class ArmourTweaks {
 	public static Logger logger = Logger.getLogger(ArmourTweaks.class.getName());

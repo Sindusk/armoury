@@ -17,7 +17,7 @@ import javassist.NotFoundException;
 import javassist.bytecode.Descriptor;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
-import mod.sin.lib.Util;
+import main.java.armoury.mod.sin.lib.Util;
 
 public class CombatTweaks {
 	public static Item handleDualWieldAttack(CombatHandler handler, Creature opponent, float delta){
@@ -202,7 +202,7 @@ public class CombatTweaks {
 				};
 				String desc = Descriptor.ofMethod(CtClass.booleanType, params1);
 				String replace = "if(this.creature.isPlayer()){"
-                		+ "  com.wurmonline.server.items.Item weapon = mod.sin.armoury.CombatTweaks.handleDualWieldAttack(this, opponent, delta);"
+                		+ "  com.wurmonline.server.items.Item weapon = CombatTweaks.handleDualWieldAttack(this, opponent, delta);"
                 		+ "  if(weapon != null){"
                 		+ "    lDead = attack(opponent, weapon, true);"
                 		+ "  }"
@@ -214,7 +214,7 @@ public class CombatTweaks {
 		            public void edit(MethodCall m) throws CannotCompileException {
 		                if (m.getMethodName().equals("getSecondaryWeapons")) {
 		                    m.replace("if(this.creature.isPlayer()){"
-		                    		+ "  com.wurmonline.server.items.Item weapon = mod.sin.armoury.CombatTweaks.handleDualWieldAttack(this, opponent, delta);"
+		                    		+ "  com.wurmonline.server.items.Item weapon = CombatTweaks.handleDualWieldAttack(this, opponent, delta);"
 		                    		+ "  if(weapon != null){"
 		                    		+ "    lDead = attack(opponent, weapon, true);"
 		                    		+ "  }"

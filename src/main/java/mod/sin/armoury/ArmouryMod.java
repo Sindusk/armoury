@@ -185,7 +185,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                 e.printStackTrace();
             }
         }
-        // Print values of mod configuration
+        // Print values of main.java.armoury.mod configuration
         this.logger.info(" -- Mod Configuration -- ");
         this.logger.log(Level.INFO, "enableNonPlayerCrits: " + this.enableNonPlayerCrits);
         this.logger.log(Level.INFO, "fixArmourLimitBuffBug: " + this.fixArmourLimitBuffBug);
