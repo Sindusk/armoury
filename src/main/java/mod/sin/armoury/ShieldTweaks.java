@@ -2,6 +2,7 @@ package mod.sin.armoury;
 
 import java.util.logging.Logger;
 
+import mod.sin.lib.Util;
 import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
 
 import com.wurmonline.server.Server;
@@ -14,7 +15,6 @@ import com.wurmonline.shared.constants.Enchants;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import main.java.armoury.mod.sin.lib.Util;
 
 public class ShieldTweaks {
 	public static Logger logger = Logger.getLogger(ShieldTweaks.class.getName());

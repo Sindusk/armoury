@@ -1,5 +1,6 @@
 package mod.sin.armoury;
 
+import mod.sin.lib.Util;
 import org.gotti.wurmunlimited.modloader.ReflectionUtil;
 import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
 
@@ -17,7 +18,6 @@ import javassist.NotFoundException;
 import javassist.bytecode.Descriptor;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
-import main.java.armoury.mod.sin.lib.Util;
 
 public class CombatTweaks {
 	public static Item handleDualWieldAttack(CombatHandler handler, Creature opponent, float delta){
