@@ -105,7 +105,7 @@ public class ArmourTweaks {
 			if(mod.enableArmourMovementModifications){
 				logger.info("Starting armour movement modifications...");
 				for(String armourName : mod.armourMovement.keySet()){
-					int armourTemplate = 0;
+					int armourTemplate;
 					if(mod.armourNameToItemTemplate.containsKey(armourName)){
 						armourTemplate = mod.armourNameToItemTemplate.get(armourName);
 					}else{

@@ -19,9 +19,9 @@ import javassist.NotFoundException;
 public class ShieldTweaks {
 	public static Logger logger = Logger.getLogger(ShieldTweaks.class.getName());
 	public static boolean checkShieldSpeed(Item shield){
-		if(shield != null && shield.getSpellSpeedBonus() > Server.rand.nextInt(500)){
-			return true;
-		}
+        if ((shield != null)) {
+            return (shield.getSpellSpeedBonus() > Server.rand.nextInt(500));
+        }
 		return false;
 	}
 	

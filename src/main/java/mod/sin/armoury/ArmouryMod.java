@@ -34,8 +34,8 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	// Armour Mapping
 	public String[] armourTypes = {"cloth", "leather", "studded", "chain", "plate", "drake", "dragonscale", // Worn armour pieces
 									"scale", "ring", "splint"}; // Used by the system but not worn by players
-	public HashMap<Integer, Float> armourTypeReduction = new HashMap<Integer, Float>();
-	public HashMap<String, Integer> armourTypeReference = new HashMap<String, Integer>();
+	public HashMap<Integer, Float> armourTypeReduction = new HashMap<>();
+	public HashMap<String, Integer> armourTypeReference = new HashMap<>();
 	// Armour modifiers
 	public float adamantineMaterialMod = 0.05f;
 	public float glimmersteelMaterialMod = 0.1f;
@@ -49,10 +49,10 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	public float plateArmourLimitFactor = -0.3f;
 	public float drakeArmourLimitFactor = -0.3f;
 	public float dragonscaleArmourLimitFactor = -0.3f;
-	public HashMap<Integer, Float> armourReductionOverride = new HashMap<Integer, Float>();
+	public HashMap<Integer, Float> armourReductionOverride = new HashMap<>();
 	// Armour movement
 	public boolean enableArmourMovementModifications = true;
-	public HashMap<String, Float> armourMovement = new HashMap<String, Float>();
+	public HashMap<String, Float> armourMovement = new HashMap<>();
 
 	// - Shield configuration -- //
 	public boolean enableShieldDamageEnchants = true;
@@ -65,13 +65,13 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	public boolean fixSavedSwingTimer = true;
 	public boolean betterDualWield = true; // HIGHLY EXPERIMENTAL
 	// Weapon variable changes
-	public HashMap<Integer, Float> weaponDamage = new HashMap<Integer, Float>();
-	public HashMap<Integer, Float> weaponSpeed = new HashMap<Integer, Float>();
-	public HashMap<Integer, Float> weaponCritChance = new HashMap<Integer, Float>();
-	public HashMap<Integer, Integer> weaponReach = new HashMap<Integer, Integer>();
-	public HashMap<Integer, Integer> weaponWeightGroup = new HashMap<Integer, Integer>();
-	public HashMap<Integer, Float> weaponParryPercent = new HashMap<Integer, Float>();
-	public HashMap<Integer, Double> weaponSkillPenalty = new HashMap<Integer, Double>();
+	public HashMap<Integer, Float> weaponDamage = new HashMap<>();
+	public HashMap<Integer, Float> weaponSpeed = new HashMap<>();
+	public HashMap<Integer, Float> weaponCritChance = new HashMap<>();
+	public HashMap<Integer, Integer> weaponReach = new HashMap<>();
+	public HashMap<Integer, Integer> weaponWeightGroup = new HashMap<>();
+	public HashMap<Integer, Float> weaponParryPercent = new HashMap<>();
+	public HashMap<Integer, Double> weaponSkillPenalty = new HashMap<>();
     
     public ArmouryMod(){
     	this.logger = Logger.getLogger(this.getClass().getName());
@@ -177,7 +177,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                             double newVal = Double.parseDouble(split[1]);
                             weaponSkillPenalty.put(weaponId, newVal);
                         } else {
-                            //Debug("Unknown config property: " + name);
+                            Debug("Unknown config property: " + name);
                         }
                 }
             } catch (Exception e) {
@@ -251,15 +251,15 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 		WeaponTweaks.onServerStarted(this);
 	}
 	
-	public HashMap<String, Integer> armourNameToItemTemplate = new HashMap<String, Integer>();
+	public HashMap<String, Integer> armourNameToItemTemplate = new HashMap<>();
 
-	public ArrayList<Armour> clothArmour = new ArrayList<Armour>();
-	public ArrayList<Armour> leatherArmour = new ArrayList<Armour>();
-	public ArrayList<Armour> studdedArmour = new ArrayList<Armour>();
-	public ArrayList<Armour> chainArmour = new ArrayList<Armour>();
-	public ArrayList<Armour> plateArmour = new ArrayList<Armour>();
-	public ArrayList<Armour> drakeArmour = new ArrayList<Armour>();
-	public ArrayList<Armour> dragonscaleArmour = new ArrayList<Armour>();
+	public ArrayList<Armour> clothArmour = new ArrayList<>();
+	public ArrayList<Armour> leatherArmour = new ArrayList<>();
+	public ArrayList<Armour> studdedArmour = new ArrayList<>();
+	public ArrayList<Armour> chainArmour = new ArrayList<>();
+	public ArrayList<Armour> plateArmour = new ArrayList<>();
+	public ArrayList<Armour> drakeArmour = new ArrayList<>();
+	public ArrayList<Armour> dragonscaleArmour = new ArrayList<>();
 	
 	private void addArmour(ArrayList<Armour> typeList, int itemTemplate){
 		ItemTemplate it = ItemTemplateFactory.getInstance().getTemplateOrNull(itemTemplate);

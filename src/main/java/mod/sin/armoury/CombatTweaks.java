@@ -117,7 +117,6 @@ public class CombatTweaks {
 		                    		+ "}"
 		                    		+ "$_ = $proceed($$);"
 		                    		+ "communicator.sendAddSpellEffect($1, 100000, this.limitingArmourFactor*100.0f);");
-		                    return;
 		                }
 		            }
 		        });
