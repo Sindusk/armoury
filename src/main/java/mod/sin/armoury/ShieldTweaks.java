@@ -18,6 +18,7 @@ import javassist.NotFoundException;
 
 public class ShieldTweaks {
 	public static Logger logger = Logger.getLogger(ShieldTweaks.class.getName());
+
 	public static boolean checkShieldSpeed(Item shield){
         if ((shield != null)) {
             return (shield.getSpellSpeedBonus() > Server.rand.nextInt(500));
@@ -50,16 +51,16 @@ public class ShieldTweaks {
 				playSound = true;
 			}
 			if(playSound){
-				SoundPlayer.playSound(attacker.getTemplate().getHitSound(attacker.getSex()), attacker.getTileX(), attacker.getTileY(), true, 0.3f);
+				SoundPlayer.playSound(attacker.getTemplate().getHitSound(attacker.getSex()), attacker.getTileX(), attacker.getTileY(), attacker.isOnSurface(), 0.3f);
 			}
 		}
 	}
 	
-	public static void preInit(ArmouryMod mod){
+	public static void preInit(){
         try {
         	ClassPool classPool = HookManager.getInstance().getClassPool();
         	Class<ShieldTweaks> thisClass = ShieldTweaks.class;
-        	if(mod.enableShieldDamageEnchants){
+        	if(ArmouryMod.enableShieldDamageEnchants){
         		CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
         		String replace = ShieldTweaks.class.getName()+".doSharedPain(this.creature, defender, defShield);"
 	            		+ "$_ = $proceed($$);";
@@ -75,7 +76,7 @@ public class ShieldTweaks {
 				    }
 				});*/
 			}
-        	if(mod.enableShieldSpeedEnchants){
+        	if(ArmouryMod.enableShieldSpeedEnchants){
         		CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
         		String insert = "if("+ShieldTweaks.class.getName()+".checkShieldSpeed(defender.getShield())){"
 						+ "  defender.getCombatHandler().usedShieldThisRound--;"

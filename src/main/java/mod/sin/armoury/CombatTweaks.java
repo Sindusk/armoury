@@ -39,14 +39,14 @@ public class CombatTweaks {
 		}
 	}
 	
-	public static void preInit(ArmouryMod mod){
+	public static void preInit(){
         try {
 			ClassPool classPool = HookManager.getInstance().getClassPool();
 			Class<CombatTweaks> thisClass = CombatTweaks.class;
 	    	
 	        // - Allow critical hits on creatures as well as players -
-			mod.enableNonPlayerCrits = false; // Disabled for now as it's not working.
-			if(mod.enableNonPlayerCrits){
+			ArmouryMod.enableNonPlayerCrits = false; // Disabled for now as it's not working.
+			if(ArmouryMod.enableNonPlayerCrits){
 		        CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
 		        CtClass[] attackParams1 = {
 		        		classPool.get("com.wurmonline.server.creatures.Creature"),
@@ -82,7 +82,7 @@ public class CombatTweaks {
 			}
 			
 			// - Fix the Armour Limit being shown in the buff bar at all times -
-			if(mod.fixArmourLimitBuffBug){
+			if(ArmouryMod.fixArmourLimitBuffBug){
 				CtClass ctPlayerInfo = classPool.get("com.wurmonline.server.players.PlayerInfo");
 				String replace = ""
 						+ "communicator.sendRemoveSpellEffect(com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_NONE);"
@@ -123,7 +123,7 @@ public class CombatTweaks {
 			}
 			
 			// - Make spell effects hud show your armour limit properly - //
-			if(mod.fixArmourLimitSpellEffect){
+			if(ArmouryMod.fixArmourLimitSpellEffect){
 				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY.getClass(), "name"), "Armour Penalty");
 				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM.getClass(), "name"), "Armour Penalty");
 				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT.getClass(), "name"), "Armour Bonus");
@@ -131,16 +131,16 @@ public class CombatTweaks {
 			}
 			
 			// - Change the minimum swing timer - //
-			if(mod.minimumSwingTime != 3.0f){
+			if(ArmouryMod.minimumSwingTime != 3.0f){
 				CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
 				String strBuilder = "";
-				if(mod.raresReduceSwingTime){
+				if(ArmouryMod.raresReduceSwingTime){
 					strBuilder += ""
 							+ "if(weapon.getRarity() > 0){"
-							+ "  calcspeed -= weapon.getRarity()*"+String.valueOf(mod.rareSwingSpeedReduction)+"f;"
+							+ "  calcspeed -= weapon.getRarity()*"+String.valueOf(ArmouryMod.rareSwingSpeedReduction)+"f;"
 							+ "}";
 				}
-				strBuilder += "$_ = $proceed("+String.valueOf(mod.minimumSwingTime)+"f, $2);";
+				strBuilder += "$_ = $proceed("+String.valueOf(ArmouryMod.minimumSwingTime)+"f, $2);";
 				
 				final String stringReplace = strBuilder;
 				CtClass[] params1 = {
@@ -173,7 +173,7 @@ public class CombatTweaks {
 			}
 			
 			// - Saved swing timer fix -
-			if(mod.fixSavedSwingTimer){
+			if(ArmouryMod.fixSavedSwingTimer){
 				CtClass ctCreature = classPool.get("com.wurmonline.server.creatures.Creature");
 				String replace = "$_ = $proceed($1, new Float(0f));";
 				Util.setReason("Fix saved swing timer.");
@@ -190,7 +190,7 @@ public class CombatTweaks {
 			
 			// - Attempt for a better dual wield system -
 			// This really doesn't work. I don't get dual wield and why it's so bad.
-			if(mod.betterDualWield){
+			if(ArmouryMod.betterDualWield){
 				CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
 				CtClass[] params1 = {
 						classPool.get("com.wurmonline.server.creatures.Creature"),
@@ -201,7 +201,7 @@ public class CombatTweaks {
 				};
 				String desc = Descriptor.ofMethod(CtClass.booleanType, params1);
 				String replace = "if(this.creature.isPlayer()){"
-                		+ "  com.wurmonline.server.items.Item weapon = CombatTweaks.handleDualWieldAttack(this, opponent, delta);"
+                		+ "  com.wurmonline.server.items.Item weapon = "+CombatTweaks.class.getName()+".handleDualWieldAttack(this, opponent, delta);"
                 		+ "  if(weapon != null){"
                 		+ "    lDead = attack(opponent, weapon, true);"
                 		+ "  }"
