@@ -469,6 +469,7 @@ public class MaterialTweaks {
                 Util.instrumentDeclared(thisClass, ctActions, "getVariableActionTime", "getStaminaModiferFor", replace);
                 Util.instrumentDeclared(thisClass, ctActions, "getSlowActionTime", "getStaminaModiferFor", replace);
                 Util.instrumentDeclared(thisClass, ctActions, "getPickActionTime", "getStaminaModiferFor", replace);
+                replace = "$_ = $proceed($$)*"+MaterialTweaks.class.getName()+".getMaterialSpeedModifier(realSource);";
                 Util.instrumentDeclared(thisClass, ctActions, "getItemCreationTime", "getStaminaModiferFor", replace);
             }
         } catch (NotFoundException e) {
