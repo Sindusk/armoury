@@ -4,6 +4,7 @@ import com.wurmonline.server.creatures.CreatureTemplate;
 import com.wurmonline.server.creatures.CreatureTemplateFactory;
 import com.wurmonline.server.items.Materials;
 import mod.sin.lib.Prop;
+import mod.sin.lib.WoundAssist;
 import org.gotti.wurmunlimited.modloader.interfaces.*;
 
 import java.util.HashMap;
@@ -68,13 +69,6 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	    return Integer.parseInt(str);
     }
 
-    public static byte parseWoundType(String str){
-	    if(WoundAssist.woundNameToType.containsKey(str.toLowerCase())){
-	        return WoundAssist.woundNameToType.get(str.toLowerCase());
-        }
-        return Byte.parseByte(str);
-    }
-
     public static byte parseMaterialType(String str){
 	    byte mat = Materials.convertMaterialStringIntoByte(str);
 	    if(mat > 0){
@@ -90,7 +84,6 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 
 		// Initialization sequences
         MaterialTweaks.initializeMaterialMaps();
-        WoundAssist.initializeWoundMaps();
         ArmourTweaks.initializeArmourMaps();
         WeaponTweaks.initializeWeaponMaps();
 
@@ -348,10 +341,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                 }
                 HashMap<Byte, Float> woundMap = ArmourTweaks.armourEffectiveness.get(armourType);
                 for(byte woundType : woundMap.keySet()){
-                    String wound = String.valueOf(woundType);
-                    if(WoundAssist.woundTypeToName.containsKey(woundType)){
-                        wound = WoundAssist.woundTypeToName.get(woundType);
-                    }
+                    String wound = WoundAssist.getWoundName(woundType);
                     logger.info(String.format("Effectiveness for armour %s against %s: %.2f%%", name, wound, woundMap.get(woundType)*100f));
                     //logger.info("Effectiveness for "+name+" against "+woundType+": "+(woundMap.get(woundType)*100f) +"%");
                 }
@@ -364,10 +354,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                 }
                 HashMap<Byte, Float> woundMap = ArmourTweaks.armourGlanceRates.get(armourType);
                 for(byte woundType : woundMap.keySet()){
-                    String wound = String.valueOf(woundType);
-                    if(WoundAssist.woundTypeToName.containsKey(woundType)){
-                        wound = WoundAssist.woundTypeToName.get(woundType);
-                    }
+                    String wound = WoundAssist.getWoundName(woundType);
                     logger.info(String.format("Glance rate for armour %s against %s: %.2f%%", name, wound, woundMap.get(woundType)*100f));
                     //logger.info("Effectiveness for "+name+" against "+woundType+": "+(woundMap.get(woundType)*100f) +"%");
                 }
@@ -382,10 +369,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
         for(byte material : ArmourTweaks.materialEffectiveness.keySet()){
             HashMap<Byte, Float> woundMap = ArmourTweaks.materialEffectiveness.get(material);
             for(byte woundType : woundMap.keySet()){
-                String wound = String.valueOf(woundType);
-                if(WoundAssist.woundTypeToName.containsKey(woundType)){
-                    wound = WoundAssist.woundTypeToName.get(woundType);
-                }
+                String wound = WoundAssist.getWoundName(woundType);
                 logger.info(String.format("Effectiveness for material %s against %s: %.2f%%", MaterialTweaks.getMaterialName(material), wound, woundMap.get(woundType)*100f));
             }
         }
@@ -394,10 +378,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
             //String name = materialNameReference.containsKey(material) ? materialNameReference.get(material) : String.valueOf(material);
             HashMap<Byte, Float> woundMap = ArmourTweaks.materialGlanceRate.get(material);
             for(byte woundType : woundMap.keySet()){
-                String wound = String.valueOf(woundType);
-                if(WoundAssist.woundTypeToName.containsKey(woundType)){
-                    wound = WoundAssist.woundTypeToName.get(woundType);
-                }
+                String wound = WoundAssist.getWoundName(woundType);
                 logger.info(String.format("Glance Rate for material %s against %s: %.2f%%", MaterialTweaks.getMaterialName(material), wound, woundMap.get(woundType)*100f));
             }
         }

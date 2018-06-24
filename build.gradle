@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.Sindusk:sindusklibrary:v1.3'
+    compile 'com.github.Sindusk:sindusklibrary:v1.5'
 }
 
 jar {

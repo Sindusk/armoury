@@ -1,21 +1,20 @@
 package mod.sin.armoury;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-
+import com.wurmonline.server.combat.Weapon;
 import com.wurmonline.server.items.Item;
+import com.wurmonline.server.items.ItemTemplate;
+import com.wurmonline.server.items.ItemTemplateFactory;
 import com.wurmonline.server.items.Materials;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import mod.sin.lib.Util;
 import org.gotti.wurmunlimited.modloader.ReflectionUtil;
-
-import com.wurmonline.server.combat.Weapon;
-import com.wurmonline.server.items.ItemTemplate;
-import com.wurmonline.server.items.ItemTemplateFactory;
 import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class WeaponTweaks {
 	public static Logger logger = Logger.getLogger(WeaponTweaks.class.getName());
@@ -100,15 +99,54 @@ public class WeaponTweaks {
 				if(wt == null){
 					logger.warning("Null weapon template for id "+i);
 				}else{
-					logger.info("Weapon \""+wt.sizeString+wt.getName()+"\" (ID "+i+") stats: ["+
-									ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "damage"))+" damage], ["+
-									ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "speed"))+" speed], ["+
-									ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "critchance"))+" critchance], ["+
-									ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "reach"))+" reach], ["+
-									ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "weightGroup"))+" weightGroup], ["+
-									ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "parryPercent"))+" parryPercent], ["+
-									ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "skillPenalty"))+" skillPenalty]"
-									);
+					String str = "Weapon \""+wt.sizeString+wt.getName()+"\" (ID "+i+") stats: ";
+					str += "["+ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "damage"))+" damage]";
+					str += ", ["+ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "speed"))+" speed]";
+					str += ", ["+ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "critchance"))+" critchance]";
+					str += ", ["+ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "reach"))+" reach]";
+					str += ", ["+ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "weightGroup"))+" weightGroup]";
+					str += ", ["+ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "parryPercent"))+" parryPercent]";
+					str += ", ["+ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "skillPenalty"))+" skillPenalty]";
+					str += ", [TYPES: ";
+					String typeString = "";
+					if(wt.isWeaponAxe()){
+						typeString += "Axe";
+					}
+					if(wt.isWeaponCrush()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Crush";
+                    }
+                    if(wt.isWeaponKnife()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Knife";
+                    }
+                    if(wt.isWeaponMelee()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Melee";
+                    }
+                    if(wt.isWeaponMisc()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Misc";
+                    }
+                    if(wt.isWeaponPierce()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Pierce";
+                    }
+                    if(wt.isWeaponPolearm()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Polearm";
+                    }
+                    if(wt.isWeaponSlash()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Slash";
+                    }
+                    if(wt.isWeaponSword()){
+					    if(!typeString.isEmpty()){ typeString += ", "; }
+					    typeString += "Sword";
+                    }
+					str += typeString;
+					str += "]";
+					logger.info(str);
 				}
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | ClassCastException | NoSuchFieldException e) {
@@ -370,7 +408,7 @@ public class WeaponTweaks {
 
 			editWeaponStats();
 			
-			//printWeapons(); // For debugging/information purposes
+			printWeapons(); // For debugging/information purposes
 			
 		} catch (IllegalArgumentException | IllegalAccessException | ClassCastException | NoSuchFieldException e) {
 			e.printStackTrace();

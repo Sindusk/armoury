@@ -8,6 +8,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import mod.sin.lib.Util;
+import mod.sin.lib.WoundAssist;
 import org.gotti.wurmunlimited.modloader.ReflectionUtil;
 import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
 
@@ -183,7 +184,7 @@ public class ArmourTweaks {
                 woundTypes.add((byte) 7); // Water
                 woundTypes.add((byte) 9); // Internal
             }else{
-                woundTypes.add(ArmouryMod.parseWoundType(split[i]));
+                woundTypes.add(WoundAssist.getWoundType(split[i]));
             }
             i++;
         }
@@ -426,7 +427,6 @@ public class ArmourTweaks {
                 Util.setBodyDeclared(thisClass, ctArmourTypes, "getMaterialMovementModifier", replace);
 	    	}
 
-            loadDefaultGlanceRates();
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		}
@@ -434,6 +434,7 @@ public class ArmourTweaks {
 	
 	public static void onItemTemplatesCreated(){
         createArmourTemplateLists();
+        loadDefaultGlanceRates();
 		try {
 			if(ArmouryMod.enableArmourMovementModifications){
 				logger.info("Starting armour movement modifications...");
