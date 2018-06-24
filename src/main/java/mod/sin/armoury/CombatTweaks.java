@@ -38,6 +38,20 @@ public class CombatTweaks {
 			return null;
 		}
 	}
+
+	public static void onServerStarted(){
+		// - Make spell effects hud show your armour limit properly - //
+		if(ArmouryMod.fixArmourLimitSpellEffect){
+			try {
+				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY.getClass(), "name"), "Armour Penalty");
+				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM.getClass(), "name"), "Armour Penalty");
+				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT.getClass(), "name"), "Armour Bonus");
+				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_NONE, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_NONE.getClass(), "name"), "Armour Bonus");
+			} catch (IllegalAccessException | NoSuchFieldException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public static void preInit(){
         try {
@@ -121,15 +135,7 @@ public class CombatTweaks {
 		            }
 		        });
 			}
-			
-			// - Make spell effects hud show your armour limit properly - //
-			if(ArmouryMod.fixArmourLimitSpellEffect){
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY.getClass(), "name"), "Armour Penalty");
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM.getClass(), "name"), "Armour Penalty");
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT.getClass(), "name"), "Armour Bonus");
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_NONE, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_NONE.getClass(), "name"), "Armour Bonus");
-			}
-			
+
 			// - Change the minimum swing timer - //
 			if(ArmouryMod.minimumSwingTime != 3.0f){
 				CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
@@ -293,7 +299,7 @@ public class CombatTweaks {
 			desc = Descriptor.ofMethod(CtClass.booleanType, params3);
 			ctCombatHandler.getMethod("attack", desc).insertBefore("logger.info(\"Calling attack(Creature, Item, boolean)\");");*/
 			
-		} catch (CannotCompileException | NotFoundException | IllegalArgumentException | IllegalAccessException | ClassCastException | NoSuchFieldException e) {
+		} catch (CannotCompileException | NotFoundException | IllegalArgumentException | ClassCastException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -502,6 +502,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	@Override
 	public void onServerStarted(){
 		WeaponTweaks.onServerStarted();
+		CombatTweaks.onServerStarted();
         for(CreatureTemplate template : CreatureTemplateFactory.getInstance().getTemplates()){
             if(ArmourAssist.armourTypeToName.containsKey((int) template.getArmourType())) {
                 logger.info(template.getName() + " - " + ArmourAssist.armourTypeToName.get((int) template.getArmourType()));
