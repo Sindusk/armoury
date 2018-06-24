@@ -3,6 +3,7 @@ package mod.sin.armoury;
 import com.wurmonline.server.creatures.CreatureTemplate;
 import com.wurmonline.server.creatures.CreatureTemplateFactory;
 import com.wurmonline.server.items.Materials;
+import mod.sin.lib.ArmourAssist;
 import mod.sin.lib.Prop;
 import mod.sin.lib.WoundAssist;
 import org.gotti.wurmunlimited.modloader.interfaces.*;
@@ -61,13 +62,6 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	public static HashMap<Integer, Integer> weaponWeightGroup = new HashMap<>();
 	public static HashMap<Integer, Float> weaponParryPercent = new HashMap<>();
 	public static HashMap<Integer, Double> weaponSkillPenalty = new HashMap<>();
-
-	public static int parseArmourType(String str){
-	    if(ArmourTweaks.armourNameToType.containsKey(str.toLowerCase())){
-	        return ArmourTweaks.armourNameToType.get(str.toLowerCase());
-        }
-	    return Integer.parseInt(str);
-    }
 
     public static byte parseMaterialType(String str){
 	    byte mat = Materials.convertMaterialStringIntoByte(str);
@@ -148,17 +142,17 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                             armourReductionOverride.put(armourId, reductionValue);
                         } else if (name.startsWith("armourDamageReduction")) {
                             String[] split = value.split(",");
-                            int armourId = parseArmourType(split[0]);
+                            int armourId = ArmourAssist.getArmourType(split[0]);
                             float reductionValue = Float.parseFloat(split[1]);
                             ArmourTweaks.addArmourDamageReduction(armourId, reductionValue);
                         } else if (name.startsWith("armourEffectiveness")) {
                             String[] split = value.split(";");
-                            int armourType = parseArmourType(split[0]);
+                            int armourType = ArmourAssist.getArmourType(split[0]);
                             String[] split2 = split[1].split(",");
                             ArmourTweaks.addArmourEffectiveness(armourType, split2);
                         } else if (name.startsWith("armourGlanceRate")) {
                             String[] split = value.split(";");
-                            int armourType = parseArmourType(split[0]);
+                            int armourType = ArmourAssist.getArmourType(split[0]);
                             String[] split2 = split[1].split(",");
                             ArmourTweaks.addArmourGlanceRate(armourType, split2);
                         } else if (name.startsWith("materialDamageReduction")) {
@@ -326,19 +320,21 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
             logger.log(Level.INFO, "unarmouredReduction: " + ArmourTweaks.unarmouredReduction);
             logger.info("> Armour Base DR Settings <");
             for(int armourType : ArmourTweaks.armourDamageReduction.keySet()){
-                String name = String.valueOf(armourType);
+                String name = ArmourAssist.getArmourName(armourType);
+                /*String name = String.valueOf(armourType);
                 if(ArmourTweaks.armourTypeToName.containsKey(armourType)){
                     name = ArmourTweaks.armourTypeToName.get(armourType);
-                }
+                }*/
             	//logger.info("Base DR for "+name+": "+(ArmourTweaks.armourDamageReduction.get(armourType)*100f) +"%");
                 logger.info(String.format("Base DR for %s: %.2f%%", name, ArmourTweaks.armourDamageReduction.get(armourType)*100f));
             }
             logger.info("> Armour Effectiveness Settings <");
             for(int armourType : ArmourTweaks.armourEffectiveness.keySet()){
-                String name = String.valueOf(armourType);
+                String name = ArmourAssist.getArmourName(armourType);
+                /*String name = String.valueOf(armourType);
                 if(ArmourTweaks.armourTypeToName.containsKey(armourType)){
                     name = ArmourTweaks.armourTypeToName.get(armourType);
-                }
+                }*/
                 HashMap<Byte, Float> woundMap = ArmourTweaks.armourEffectiveness.get(armourType);
                 for(byte woundType : woundMap.keySet()){
                     String wound = WoundAssist.getWoundName(woundType);
@@ -348,10 +344,11 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
             }
             logger.info("> Armour Glance Rate Settings <");
             for(int armourType : ArmourTweaks.armourGlanceRates.keySet()){
-                String name = String.valueOf(armourType);
+                String name = ArmourAssist.getArmourName(armourType);
+                /*String name = String.valueOf(armourType);
                 if(ArmourTweaks.armourTypeToName.containsKey(armourType)){
                     name = ArmourTweaks.armourTypeToName.get(armourType);
-                }
+                }*/
                 HashMap<Byte, Float> woundMap = ArmourTweaks.armourGlanceRates.get(armourType);
                 for(byte woundType : woundMap.keySet()){
                     String wound = WoundAssist.getWoundName(woundType);
@@ -506,8 +503,8 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	public void onServerStarted(){
 		WeaponTweaks.onServerStarted();
         for(CreatureTemplate template : CreatureTemplateFactory.getInstance().getTemplates()){
-            if(ArmourTweaks.armourTypeToName.containsKey((int) template.getArmourType())) {
-                logger.info(template.getName() + " - " + ArmourTweaks.armourTypeToName.get((int) template.getArmourType()));
+            if(ArmourAssist.armourTypeToName.containsKey((int) template.getArmourType())) {
+                logger.info(template.getName() + " - " + ArmourAssist.armourTypeToName.get((int) template.getArmourType()));
             }
         }
 	}

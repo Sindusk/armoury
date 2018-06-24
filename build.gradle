@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group "mod.sin"
-version "2.2"
+version "2.3"
 
 repositories {
     mavenCentral()
@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.Sindusk:sindusklibrary:v1.5'
+    compile 'com.github.Sindusk:sindusklibrary:v1.6'
 }
 
 jar {

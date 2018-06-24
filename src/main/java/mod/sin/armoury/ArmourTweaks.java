@@ -7,6 +7,7 @@ import com.wurmonline.server.items.*;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+import mod.sin.lib.ArmourAssist;
 import mod.sin.lib.Util;
 import mod.sin.lib.WoundAssist;
 import org.gotti.wurmunlimited.modloader.ReflectionUtil;
@@ -19,10 +20,8 @@ import java.util.logging.Logger;
 public class ArmourTweaks {
 	public static Logger logger = Logger.getLogger(ArmourTweaks.class.getName());
 
-    public static String[] armourTypes = {"cloth", "leather", "studded", "chain", "plate", "drake", "dragonscale", // Worn armour pieces
-            "scale", "ring", "splint"}; // Used by the system but not worn by players
-    public static HashMap<String, Integer> armourNameToType = new HashMap<>();
-    public static HashMap<Integer, String> armourTypeToName = new HashMap<>();
+    //public static String[] armourTypes = {"cloth", "leather", "studded", "chain", "plate", "drake", "dragonscale", // Worn armour pieces
+      //      "scale", "ring", "splint"}; // Used by the system but not worn by players
 
     public static HashMap<Integer, Float> armourDamageReduction = new HashMap<>();
     public static HashMap<Integer, HashMap<Byte, Float>> armourEffectiveness = new HashMap<>();
@@ -107,14 +106,8 @@ public class ArmourTweaks {
 	            toReturn *= materialGlanceRate.get(armourMaterial).get(damageType);
 	            //logger.info(String.format("Found material %s, adjusting glance rate by %.2f%%.", armourMaterial, materialGlanceRate.get(armourMaterial).get(damageType)));
             }
-            String name = String.valueOf(armourType);
-            if(ArmourTweaks.armourTypeToName.containsKey(armourType)){
-                name = ArmourTweaks.armourTypeToName.get(armourType);
-            }
-            String wound = String.valueOf(damageType);
-            if(WoundAssist.woundTypeToName.containsKey(damageType)){
-                wound = WoundAssist.woundTypeToName.get(damageType);
-            }
+            String name = ArmourAssist.getArmourName(armourType);
+	        String wound = WoundAssist.getWoundName(damageType);
 	        //logger.info(String.format("Glance rate for %s against %s: %.2f", name, wound, toReturn));
             return toReturn;
         }
@@ -265,7 +258,7 @@ public class ArmourTweaks {
 
     public static void initializeArmourMaps(){
 	    // Armour name mapping:
-        armourNameToType.put("cloth", ArmourTypes.ARMOUR_CLOTH);
+        /*armourNameToType.put("cloth", ArmourTypes.ARMOUR_CLOTH);
         armourNameToType.put("leather", ArmourTypes.ARMOUR_LEATHER);
         armourNameToType.put("studded", ArmourTypes.ARMOUR_STUDDED);
         armourNameToType.put("chain", ArmourTypes.ARMOUR_CHAIN);
@@ -277,7 +270,7 @@ public class ArmourTweaks {
         armourNameToType.put("splint", ArmourTypes.ARMOUR_SPLINT);
         for(String name : armourNameToType.keySet()){
             armourTypeToName.put(armourNameToType.get(name), name);
-        }
+        }*/
 
         // Default material movement speed modifiers:
         materialMovementModifier.put(Materials.MATERIAL_ADAMANTINE, 0.95f);
