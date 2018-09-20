@@ -1,11 +1,7 @@
 package mod.sin.armoury;
 
-import com.wurmonline.server.creatures.CreatureTemplate;
-import com.wurmonline.server.creatures.CreatureTemplateFactory;
 import com.wurmonline.server.items.Materials;
-import mod.sin.lib.ArmourAssist;
 import mod.sin.lib.Prop;
-import mod.sin.lib.WoundAssist;
 import org.gotti.wurmunlimited.modloader.interfaces.*;
 
 import java.util.HashMap;
@@ -19,28 +15,6 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 
     // Configuration options
 	public static boolean enableNonPlayerCrits = true;
-	public static boolean fixArmourLimitBuffBug = true;
-	public static boolean fixArmourLimitSpellEffect = true;
-
-	// -- Armour configuration -- //
-	public static boolean enableArmourModifications = true;
-	// Armour modifiers
-	//public static float adamantineMaterialMod = 0.05f;
-	//public static float glimmersteelMaterialMod = 0.1f;
-	//public static float seryllMaterialMod = 0.1f;
-	// Armour limit factors
-	public static boolean enableCustomArmourLimitFactors = true;
-	public static float clothArmourLimitFactor = 0.3f;
-	public static float leatherArmourLimitFactor = 0.3f;
-	public static float studdedArmourLimitFactor = 0.0f;
-	public static float chainArmourLimitFactor = -0.15f;
-	public static float plateArmourLimitFactor = -0.3f;
-	public static float drakeArmourLimitFactor = -0.3f;
-	public static float dragonscaleArmourLimitFactor = -0.3f;
-	public static HashMap<Integer, Float> armourReductionOverride = new HashMap<>();
-	// Armour movement
-	public static boolean enableArmourMovementModifications = true;
-	public static HashMap<String, Float> armourMovement = new HashMap<>();
 
 	// - Shield configuration -- //
 	public static boolean enableShieldDamageEnchants = true;
@@ -78,37 +52,17 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 
 		// Initialization sequences
         MaterialTweaks.initializeMaterialMaps();
-        ArmourTweaks.initializeArmourMaps();
         WeaponTweaks.initializeWeaponMaps();
 
 		// Base configuration options
         enableNonPlayerCrits = Prop.getBooleanProperty("enableNonPlayerCrits", enableNonPlayerCrits);
-        //enableNonPlayerCrits = Boolean.parseBoolean(properties.getProperty("enableNonPlayerCrits", Boolean.toString(enableNonPlayerCrits)));
-        fixArmourLimitBuffBug = Prop.getBooleanProperty("fixArmourLimitBuffBug", fixArmourLimitBuffBug);
-        //fixArmourLimitBuffBug = Boolean.parseBoolean(properties.getProperty("fixArmourLimitBuffBug", Boolean.toString(fixArmourLimitBuffBug)));
-        fixArmourLimitSpellEffect = Prop.getBooleanProperty("fixArmourLimitSpellEffect", fixArmourLimitSpellEffect);
-        //fixArmourLimitSpellEffect = Boolean.parseBoolean(properties.getProperty("fixArmourLimitSpellEffect", Boolean.toString(fixArmourLimitSpellEffect)));
-        enableArmourModifications = Prop.getBooleanProperty("enableArmourReductionModifications", enableArmourModifications);
-        //enableArmourModifications = Boolean.parseBoolean(properties.getProperty("enableArmourModifications", Boolean.toString(enableArmourModifications)));
-        ArmourTweaks.unarmouredReduction = Prop.getFloatProperty("unarmouredReduction", ArmourTweaks.unarmouredReduction);
         /*if(enableArmourModifications){
             ArmourTweaks.configure();
         }*/
     	//adamantineMaterialMod = Float.parseFloat(properties.getProperty("adamantineMaterialMod", Float.toString(adamantineMaterialMod)));
     	//glimmersteelMaterialMod = Float.parseFloat(properties.getProperty("glimmersteelMaterialMod", Float.toString(glimmersteelMaterialMod)));
     	//seryllMaterialMod = Float.parseFloat(properties.getProperty("seryllMaterialMod", Float.toString(seryllMaterialMod)));
-    	// Armour limit factors
-        enableCustomArmourLimitFactors = Boolean.parseBoolean(properties.getProperty("enableCustomArmourLimitFactors", Boolean.toString(enableCustomArmourLimitFactors)));
-    	clothArmourLimitFactor = Float.parseFloat(properties.getProperty("clothArmourLimitFactor", Float.toString(clothArmourLimitFactor)));
-    	leatherArmourLimitFactor = Float.parseFloat(properties.getProperty("leatherArmourLimitFactor", Float.toString(leatherArmourLimitFactor)));
-    	studdedArmourLimitFactor = Float.parseFloat(properties.getProperty("studdedArmourLimitFactor", Float.toString(studdedArmourLimitFactor)));
-    	chainArmourLimitFactor = Float.parseFloat(properties.getProperty("chainArmourLimitFactor", Float.toString(chainArmourLimitFactor)));
-    	plateArmourLimitFactor = Float.parseFloat(properties.getProperty("plateArmourLimitFactor", Float.toString(plateArmourLimitFactor)));
-    	drakeArmourLimitFactor = Float.parseFloat(properties.getProperty("drakeArmourLimitFactor", Float.toString(drakeArmourLimitFactor)));
-    	dragonscaleArmourLimitFactor = Float.parseFloat(properties.getProperty("dragonscaleArmourLimitFactor", Float.toString(dragonscaleArmourLimitFactor)));
-    	// Armour movement modifiers
-        enableArmourMovementModifications = Boolean.parseBoolean(properties.getProperty("enableArmourMovementModifications", Boolean.toString(enableArmourMovementModifications)));
-        // Shield configuration
+    	// Shield configuration
         enableShieldDamageEnchants = Boolean.parseBoolean(properties.getProperty("enableShieldDamageEnchants", Boolean.toString(enableShieldDamageEnchants)));
         // Weapon configuration
         minimumSwingTime = Float.parseFloat(properties.getProperty("minimumSwingTime", Float.toString(minimumSwingTime)));
@@ -130,52 +84,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                     case "depend.suggests":
                         break; //ignore
                     default:
-                    	if (name.startsWith("armourMovement")) {
-                        	String[] split = value.split(",");
-                            String armourName = split[0];
-                            float newVal = Float.parseFloat(split[1]);
-                            armourMovement.put(armourName, newVal);
-                        } else if (name.startsWith("armourReductionOverride")) {
-                            String[] split = value.split(",");
-                            int armourId = Integer.parseInt(split[0]);
-                            float reductionValue = Float.parseFloat(split[1]);
-                            armourReductionOverride.put(armourId, reductionValue);
-                        } else if (name.startsWith("armourDamageReduction")) {
-                            String[] split = value.split(",");
-                            int armourId = ArmourAssist.getArmourType(split[0]);
-                            float reductionValue = Float.parseFloat(split[1]);
-                            ArmourTweaks.addArmourDamageReduction(armourId, reductionValue);
-                        } else if (name.startsWith("armourEffectiveness")) {
-                            String[] split = value.split(";");
-                            int armourType = ArmourAssist.getArmourType(split[0]);
-                            String[] split2 = split[1].split(",");
-                            ArmourTweaks.addArmourEffectiveness(armourType, split2);
-                        } else if (name.startsWith("armourGlanceRate")) {
-                            String[] split = value.split(";");
-                            int armourType = ArmourAssist.getArmourType(split[0]);
-                            String[] split2 = split[1].split(",");
-                            ArmourTweaks.addArmourGlanceRate(armourType, split2);
-                        } else if (name.startsWith("materialDamageReduction")) {
-                            String[] split = value.split(",");
-                            byte material = parseMaterialType(split[0]);
-                            float reduction = Float.parseFloat(split[1]);
-                            ArmourTweaks.addMaterialReduction(material, reduction);
-                        } else if (name.startsWith("materialEffectiveness")) {
-                            String[] split = value.split(";");
-                            byte material = parseMaterialType(split[0]);
-                            String[] split2 = split[1].split(",");
-                            ArmourTweaks.addMaterialEffectiveness(material, split2);
-                        } else if (name.startsWith("materialGlanceRate")) {
-                            String[] split = value.split(";");
-                            byte material = parseMaterialType(split[0]);
-                            String[] split2 = split[1].split(",");
-                            ArmourTweaks.addMaterialGlanceRate(material, split2);
-                        } else if (name.startsWith("materialMovementModifier")) {
-                            String[] split = value.split(",");
-                            byte material = parseMaterialType(split[0]);
-                            float speed = Float.parseFloat(split[1]);
-                            ArmourTweaks.addMaterialMovementModifier(material, speed);
-                        } else if (name.startsWith("materialWeaponDamage")) {
+                    	if (name.startsWith("materialWeaponDamage")) {
                             String[] split = value.split(",");
                             byte material = parseMaterialType(split[0]);
                             double mult = Double.parseDouble(split[1]);
@@ -312,77 +221,7 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
         // Print values of main.java.armoury.mod configuration
         logger.info(" -- Mod Configuration -- ");
         logger.log(Level.INFO, "enableNonPlayerCrits: " + enableNonPlayerCrits);
-        logger.log(Level.INFO, "fixArmourLimitBuffBug: " + fixArmourLimitBuffBug);
-        logger.log(Level.INFO, "fixArmourLimitSpellEffect: " + fixArmourLimitSpellEffect);
-        logger.info(" -- Armour Configuration -- ");
-        logger.log(Level.INFO, "enableArmourModifications: " + enableArmourModifications);
-        if(enableArmourModifications){
-            logger.log(Level.INFO, "unarmouredReduction: " + ArmourTweaks.unarmouredReduction);
-            logger.info("> Armour Base DR Settings <");
-            for(int armourType : ArmourTweaks.armourDamageReduction.keySet()){
-                String name = ArmourAssist.getArmourName(armourType);
-                /*String name = String.valueOf(armourType);
-                if(ArmourTweaks.armourTypeToName.containsKey(armourType)){
-                    name = ArmourTweaks.armourTypeToName.get(armourType);
-                }*/
-            	//logger.info("Base DR for "+name+": "+(ArmourTweaks.armourDamageReduction.get(armourType)*100f) +"%");
-                logger.info(String.format("Base DR for %s: %.2f%%", name, ArmourTweaks.armourDamageReduction.get(armourType)*100f));
-            }
-            logger.info("> Armour Effectiveness Settings <");
-            for(int armourType : ArmourTweaks.armourEffectiveness.keySet()){
-                String name = ArmourAssist.getArmourName(armourType);
-                /*String name = String.valueOf(armourType);
-                if(ArmourTweaks.armourTypeToName.containsKey(armourType)){
-                    name = ArmourTweaks.armourTypeToName.get(armourType);
-                }*/
-                HashMap<Byte, Float> woundMap = ArmourTweaks.armourEffectiveness.get(armourType);
-                for(byte woundType : woundMap.keySet()){
-                    String wound = WoundAssist.getWoundName(woundType);
-                    logger.info(String.format("Effectiveness for armour %s against %s: %.2f%%", name, wound, woundMap.get(woundType)*100f));
-                    //logger.info("Effectiveness for "+name+" against "+woundType+": "+(woundMap.get(woundType)*100f) +"%");
-                }
-            }
-            logger.info("> Armour Glance Rate Settings <");
-            for(int armourType : ArmourTweaks.armourGlanceRates.keySet()){
-                String name = ArmourAssist.getArmourName(armourType);
-                /*String name = String.valueOf(armourType);
-                if(ArmourTweaks.armourTypeToName.containsKey(armourType)){
-                    name = ArmourTweaks.armourTypeToName.get(armourType);
-                }*/
-                HashMap<Byte, Float> woundMap = ArmourTweaks.armourGlanceRates.get(armourType);
-                for(byte woundType : woundMap.keySet()){
-                    String wound = WoundAssist.getWoundName(woundType);
-                    logger.info(String.format("Glance rate for armour %s against %s: %.2f%%", name, wound, woundMap.get(woundType)*100f));
-                    //logger.info("Effectiveness for "+name+" against "+woundType+": "+(woundMap.get(woundType)*100f) +"%");
-                }
-            }
-        }
         logger.info(" -- Material Configuration -- ");
-        logger.info("> Armour Material Damage Reduction Settings <");
-        for(byte material : ArmourTweaks.materialDamageReduction.keySet()){
-            logger.info(String.format("Base DR modifier for material %s: %.2f%%", MaterialTweaks.getMaterialName(material), ArmourTweaks.materialDamageReduction.get(material)*100f));
-        }
-        logger.info("> Armour Material Effectiveness Settings <");
-        for(byte material : ArmourTweaks.materialEffectiveness.keySet()){
-            HashMap<Byte, Float> woundMap = ArmourTweaks.materialEffectiveness.get(material);
-            for(byte woundType : woundMap.keySet()){
-                String wound = WoundAssist.getWoundName(woundType);
-                logger.info(String.format("Effectiveness for material %s against %s: %.2f%%", MaterialTweaks.getMaterialName(material), wound, woundMap.get(woundType)*100f));
-            }
-        }
-        logger.info("> Armour Material Glance Rate Settings <");
-        for(byte material : ArmourTweaks.materialGlanceRate.keySet()){
-            //String name = materialNameReference.containsKey(material) ? materialNameReference.get(material) : String.valueOf(material);
-            HashMap<Byte, Float> woundMap = ArmourTweaks.materialGlanceRate.get(material);
-            for(byte woundType : woundMap.keySet()){
-                String wound = WoundAssist.getWoundName(woundType);
-                logger.info(String.format("Glance Rate for material %s against %s: %.2f%%", MaterialTweaks.getMaterialName(material), wound, woundMap.get(woundType)*100f));
-            }
-        }
-        logger.info("> Armour Material Movement Modifier Settings <");
-        for(byte material : ArmourTweaks.materialMovementModifier.keySet()){
-            logger.info(String.format("Movement Speed modifier for material %s: %.2f%%", MaterialTweaks.getMaterialName(material), ArmourTweaks.materialMovementModifier.get(material)*100f));
-        }
         logger.info("> Weapon Material Damage Settings <");
         for(byte material : WeaponTweaks.materialWeaponDamage.keySet()){
             logger.info(String.format("Damage modifier for material %s: %.2f%%", MaterialTweaks.getMaterialName(material), WeaponTweaks.materialWeaponDamage.get(material)*100f));
@@ -459,20 +298,6 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
         for(byte material : MaterialTweaks.materialActionSpeedModifier.keySet()){
             logger.info(String.format("Action Speed modifier for material %s: %.2f%%", MaterialTweaks.getMaterialName(material), MaterialTweaks.materialActionSpeedModifier.get(material)*100f));
         }
-        /*logger.log(Level.INFO, "adamantineMaterialMod: " + adamantineMaterialMod);
-        logger.log(Level.INFO, "glimmersteelMaterialMod: " + glimmersteelMaterialMod);
-        logger.log(Level.INFO, "seryllMaterialMod: " + seryllMaterialMod);*/
-        logger.info(" -- Armour Limit Configuration -- ");
-        logger.log(Level.INFO, "enableCustomArmourLimitFactors: " + enableCustomArmourLimitFactors);
-        if(enableCustomArmourLimitFactors){
-            logger.log(Level.INFO, "clothArmourLimitFactor: " + clothArmourLimitFactor);
-            logger.log(Level.INFO, "leatherArmourLimitFactor: " + leatherArmourLimitFactor);
-            logger.log(Level.INFO, "studdedArmourLimitFactor: " + studdedArmourLimitFactor);
-            logger.log(Level.INFO, "chainArmourLimitFactor: " + chainArmourLimitFactor);
-            logger.log(Level.INFO, "plateArmourLimitFactor: " + plateArmourLimitFactor);
-            logger.log(Level.INFO, "drakeArmourLimitFactor: " + drakeArmourLimitFactor);
-            logger.log(Level.INFO, "dragonscaleArmourLimitFactor: " + dragonscaleArmourLimitFactor);
-        }
         logger.info(" -- Shield Configuration -- ");
         logger.log(Level.INFO, "enableShieldDamageEnchants: " + enableShieldDamageEnchants);
         logger.info(" -- Weapon Configuration -- ");
@@ -487,7 +312,6 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	@Override
 	public void preInit(){
 		CombatTweaks.preInit();
-		ArmourTweaks.preInit();
 		ShieldTweaks.preInit();
 		WeaponTweaks.preInit();
 		MaterialTweaks.preInit();
@@ -496,17 +320,10 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
 	@Override
 	public void onItemTemplatesCreated(){
 		logger.info("Beginning onItemTemplatesCreated...");
-		ArmourTweaks.onItemTemplatesCreated();
 	}
 	
 	@Override
 	public void onServerStarted(){
 		WeaponTweaks.onServerStarted();
-		CombatTweaks.onServerStarted();
-        for(CreatureTemplate template : CreatureTemplateFactory.getInstance().getTemplates()){
-            if(ArmourAssist.armourTypeToName.containsKey((int) template.getArmourType())) {
-                logger.info(template.getName() + " - " + ArmourAssist.armourTypeToName.get((int) template.getArmourType()));
-            }
-        }
 	}
 }

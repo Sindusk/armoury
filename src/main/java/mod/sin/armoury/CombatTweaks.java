@@ -1,23 +1,14 @@
 package mod.sin.armoury;
 
-import mod.sin.lib.Util;
-import org.gotti.wurmunlimited.modloader.ReflectionUtil;
-import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
-
 import com.wurmonline.server.Server;
 import com.wurmonline.server.creatures.CombatHandler;
 import com.wurmonline.server.creatures.Creature;
-import com.wurmonline.server.creatures.SpellEffectsEnum;
 import com.wurmonline.server.items.Item;
-
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtPrimitiveType;
-import javassist.NotFoundException;
+import javassist.*;
 import javassist.bytecode.Descriptor;
-import javassist.expr.ExprEditor;
-import javassist.expr.MethodCall;
+import mod.sin.lib.Util;
+import org.gotti.wurmunlimited.modloader.ReflectionUtil;
+import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
 
 public class CombatTweaks {
 	public static Item handleDualWieldAttack(CombatHandler handler, Creature opponent, float delta){
@@ -39,20 +30,6 @@ public class CombatTweaks {
 		}
 	}
 
-	public static void onServerStarted(){
-		// - Make spell effects hud show your armour limit properly - //
-		if(ArmouryMod.fixArmourLimitSpellEffect){
-			try {
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_HEAVY.getClass(), "name"), "Armour Penalty");
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM.getClass(), "name"), "Armour Penalty");
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_LIGHT.getClass(), "name"), "Armour Bonus");
-				ReflectionUtil.setPrivateField(SpellEffectsEnum.ARMOUR_LIMIT_NONE, ReflectionUtil.getField(SpellEffectsEnum.ARMOUR_LIMIT_NONE.getClass(), "name"), "Armour Bonus");
-			} catch (IllegalAccessException | NoSuchFieldException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public static void preInit(){
         try {
 			ClassPool classPool = HookManager.getInstance().getClassPool();
@@ -93,47 +70,6 @@ public class CombatTweaks {
 				        }
 				    }
 				});*/
-			}
-			
-			// - Fix the Armour Limit being shown in the buff bar at all times -
-			if(ArmouryMod.fixArmourLimitBuffBug){
-				CtClass ctPlayerInfo = classPool.get("com.wurmonline.server.players.PlayerInfo");
-				String replace = ""
-						+ "communicator.sendRemoveSpellEffect(com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_NONE);"
-                		+ "communicator.sendRemoveSpellEffect(com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM);"
-                		+ "communicator.sendRemoveSpellEffect(com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_HEAVY);"
-                		+ "$_ = $proceed($$);";
-				Util.setReason("Fix armour limit buff bug.");
-				Util.instrumentDeclared(thisClass, ctPlayerInfo, "setArmourLimitingFactor", "sendRemoveSpellEffect", replace);
-		        /*ctPlayerInfo.getDeclaredMethod("setArmourLimitingFactor").instrument(new ExprEditor(){
-		            public void edit(MethodCall m) throws CannotCompileException {
-		                if (m.getMethodName().equals("sendRemoveSpellEffect")) {
-		                    m.replace("communicator.sendRemoveSpellEffect(com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_NONE);"
-		                    		+ "communicator.sendRemoveSpellEffect(com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_MEDIUM);"
-		                    		+ "communicator.sendRemoveSpellEffect(com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_HEAVY);"
-		                    		+ "$_ = $proceed($$);");
-		                    return;
-		                }
-		            }
-		        });*/
-				replace = "if($1 == null){"
-                		+ "  $1 = com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_NONE;"
-                		+ "}"
-                		+ "$_ = $proceed($$);"
-                		+ "communicator.sendAddSpellEffect($1, 100000, this.limitingArmourFactor*100.0f);";
-				Util.setReason("Fix armour limit buff bug.");
-				Util.instrumentDeclared(thisClass, ctPlayerInfo, "setArmourLimitingFactor", "sendAddStatusEffect", replace);
-		        ctPlayerInfo.getDeclaredMethod("setArmourLimitingFactor").instrument(new ExprEditor(){
-		            public void edit(MethodCall m) throws CannotCompileException {
-		                if (m.getMethodName().equals("sendAddStatusEffect")) {
-		                    m.replace("if($1 == null){"
-		                    		+ "  $1 = com.wurmonline.server.creatures.SpellEffectsEnum.ARMOUR_LIMIT_NONE;"
-		                    		+ "}"
-		                    		+ "$_ = $proceed($$);"
-		                    		+ "communicator.sendAddSpellEffect($1, 100000, this.limitingArmourFactor*100.0f);");
-		                }
-		            }
-		        });
 			}
 
 			// - Change the minimum swing timer - //
@@ -299,7 +235,7 @@ public class CombatTweaks {
 			desc = Descriptor.ofMethod(CtClass.booleanType, params3);
 			ctCombatHandler.getMethod("attack", desc).insertBefore("logger.info(\"Calling attack(Creature, Item, boolean)\");");*/
 			
-		} catch (CannotCompileException | NotFoundException | IllegalArgumentException | ClassCastException e) {
+		} catch ( NotFoundException | IllegalArgumentException | ClassCastException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
