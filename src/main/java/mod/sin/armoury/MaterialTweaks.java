@@ -385,7 +385,7 @@ public class MaterialTweaks {
             final Class<MaterialTweaks> thisClass = MaterialTweaks.class;
             String replace;
 
-            if(ArmouryMod.enableItemMaterialChanges){
+            if(ArmouryModMain.enableItemMaterialChanges){
                 Util.setReason("Enable material damage taken modifications.");
                 CtClass ctItem = classPool.get("com.wurmonline.server.items.Item");
                 replace = "{"

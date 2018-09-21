@@ -9,9 +9,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ArmouryMod
+public class ArmouryModMain
 implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListener, ServerStartedListener {
-	public static Logger logger = Logger.getLogger(ArmouryMod.class.getName());
+	public static Logger logger = Logger.getLogger(ArmouryModMain.class.getName());
 
     // Configuration options
 	public static boolean enableNonPlayerCrits = true;

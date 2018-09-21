@@ -60,7 +60,7 @@ public class ShieldTweaks {
         try {
         	ClassPool classPool = HookManager.getInstance().getClassPool();
         	Class<ShieldTweaks> thisClass = ShieldTweaks.class;
-        	if(ArmouryMod.enableShieldDamageEnchants){
+        	if(ArmouryModMain.enableShieldDamageEnchants){
         		CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
         		String replace = ShieldTweaks.class.getName()+".doSharedPain(this.creature, defender, defShield);"
 	            		+ "$_ = $proceed($$);";
@@ -76,7 +76,7 @@ public class ShieldTweaks {
 				    }
 				});*/
 			}
-        	if(ArmouryMod.enableShieldSpeedEnchants){
+        	if(ArmouryModMain.enableShieldSpeedEnchants){
         		CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
         		String insert = "if("+ShieldTweaks.class.getName()+".checkShieldSpeed(defender.getShield())){"
 						+ "  defender.getCombatHandler().usedShieldThisRound--;"

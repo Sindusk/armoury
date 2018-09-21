@@ -161,7 +161,7 @@ public class WeaponTweaks {
 			String tweakType;
 			tweakType = "damage";
 			logger.info("Beginning weapon "+tweakType+" tweaks...");
-			for(int id : ArmouryMod.weaponDamage.keySet()){
+			for(int id : ArmouryModMain.weaponDamage.keySet()){
 				it = ItemTemplateFactory.getInstance().getTemplateOrNull(id);
 				if(it == null){
 					logger.severe("[ERROR]: Item template for id "+id+" in weapon "+tweakType+" configuration is invalid.");
@@ -173,7 +173,7 @@ public class WeaponTweaks {
 					continue;
 				}
 				float oldValue = ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "damage"));
-				float newValue = ArmouryMod.weaponDamage.get(id);
+				float newValue = ArmouryModMain.weaponDamage.get(id);
 				String diff;
 				if(newValue > oldValue){
 					diff = "+"+(newValue-oldValue);
@@ -185,7 +185,7 @@ public class WeaponTweaks {
 			}
 			tweakType = "speed";
 			logger.info("Beginning weapon "+tweakType+" tweaks...");
-			for(int id : ArmouryMod.weaponSpeed.keySet()){
+			for(int id : ArmouryModMain.weaponSpeed.keySet()){
 				it = ItemTemplateFactory.getInstance().getTemplateOrNull(id);
 				if(it == null){
 					logger.severe("[ERROR]: Item template for id "+id+" in weapon "+tweakType+" configuration is invalid. Please double check your configuration.");
@@ -197,7 +197,7 @@ public class WeaponTweaks {
 					continue;
 				}
 				float oldValue = ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "speed"));
-				float newValue = ArmouryMod.weaponSpeed.get(id);
+				float newValue = ArmouryModMain.weaponSpeed.get(id);
 				String diff;
 				if(newValue > oldValue){
 					diff = "+"+(newValue-oldValue);
@@ -209,7 +209,7 @@ public class WeaponTweaks {
 			}
 			tweakType = "crit chance";
 			logger.info("Beginning weapon "+tweakType+" tweaks...");
-			for(int id : ArmouryMod.weaponCritChance.keySet()){
+			for(int id : ArmouryModMain.weaponCritChance.keySet()){
 				it = ItemTemplateFactory.getInstance().getTemplateOrNull(id);
 				if(it == null){
 					logger.severe("[ERROR]: Item template for id "+id+" in weapon "+tweakType+" configuration is invalid. Please double check your configuration.");
@@ -221,7 +221,7 @@ public class WeaponTweaks {
 					continue;
 				}
 				float oldValue = ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "critchance"));
-				float newValue = ArmouryMod.weaponCritChance.get(id);
+				float newValue = ArmouryModMain.weaponCritChance.get(id);
 				String diff;
 				if(newValue > oldValue){
 					diff = "+"+(newValue-oldValue);
@@ -233,7 +233,7 @@ public class WeaponTweaks {
 			}
 			tweakType = "reach";
 			logger.info("Beginning weapon "+tweakType+" tweaks...");
-			for(int id : ArmouryMod.weaponReach.keySet()){
+			for(int id : ArmouryModMain.weaponReach.keySet()){
 				it = ItemTemplateFactory.getInstance().getTemplateOrNull(id);
 				if(it == null){
 					logger.severe("[ERROR]: Item template for id "+id+" in weapon "+tweakType+" configuration is invalid. Please double check your configuration.");
@@ -245,7 +245,7 @@ public class WeaponTweaks {
 					continue;
 				}
 				int oldValue = ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "reach"));
-				int newValue = ArmouryMod.weaponReach.get(id);
+				int newValue = ArmouryModMain.weaponReach.get(id);
 				String diff;
 				if(newValue > oldValue){
 					diff = "+"+(newValue-oldValue);
@@ -257,7 +257,7 @@ public class WeaponTweaks {
 			}
 			tweakType = "weight group";
 			logger.info("Beginning weapon "+tweakType+" tweaks...");
-			for(int id : ArmouryMod.weaponWeightGroup.keySet()){
+			for(int id : ArmouryModMain.weaponWeightGroup.keySet()){
 				it = ItemTemplateFactory.getInstance().getTemplateOrNull(id);
 				if(it == null){
 					logger.severe("[ERROR]: Item template for id "+id+" in weapon "+tweakType+" configuration is invalid. Please double check your configuration.");
@@ -269,7 +269,7 @@ public class WeaponTweaks {
 					continue;
 				}
 				int oldValue = ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "weightGroup"));
-				int newValue = ArmouryMod.weaponWeightGroup.get(id);
+				int newValue = ArmouryModMain.weaponWeightGroup.get(id);
 				String diff;
 				if(newValue > oldValue){
 					diff = "+"+(newValue-oldValue);
@@ -281,7 +281,7 @@ public class WeaponTweaks {
 			}
 			tweakType = "parry percent";
 			logger.info("Beginning weapon "+tweakType+" tweaks...");
-			for(int id : ArmouryMod.weaponParryPercent.keySet()){
+			for(int id : ArmouryModMain.weaponParryPercent.keySet()){
 				it = ItemTemplateFactory.getInstance().getTemplateOrNull(id);
 				if(it == null){
 					logger.severe("[ERROR]: Item template for id "+id+" in weapon "+tweakType+" configuration is invalid. Please double check your configuration.");
@@ -293,7 +293,7 @@ public class WeaponTweaks {
 					continue;
 				}
 				float oldValue = ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "parryPercent"));
-				float newValue = ArmouryMod.weaponParryPercent.get(id);
+				float newValue = ArmouryModMain.weaponParryPercent.get(id);
 				String diff;
 				if(newValue > oldValue){
 					diff = "+"+(newValue-oldValue);
@@ -305,7 +305,7 @@ public class WeaponTweaks {
 			}
 			tweakType = "skill penalty";
 			logger.info("Beginning weapon "+tweakType+" tweaks...");
-			for(int id : ArmouryMod.weaponSkillPenalty.keySet()){
+			for(int id : ArmouryModMain.weaponSkillPenalty.keySet()){
 				it = ItemTemplateFactory.getInstance().getTemplateOrNull(id);
 				if(it == null){
 					logger.severe("[ERROR]: Item template for id "+id+" in weapon "+tweakType+" configuration is invalid. Please double check your configuration.");
@@ -317,7 +317,7 @@ public class WeaponTweaks {
 					continue;
 				}
 				double oldValue = ReflectionUtil.getPrivateField(cw, ReflectionUtil.getField(cw.getClass(), "skillPenalty"));
-				double newValue = ArmouryMod.weaponSkillPenalty.get(id);
+				double newValue = ArmouryModMain.weaponSkillPenalty.get(id);
 				String diff;
 				if(newValue > oldValue){
 					diff = "+"+(newValue-oldValue);
@@ -368,7 +368,7 @@ public class WeaponTweaks {
 			final Class<WeaponTweaks> thisClass = WeaponTweaks.class;
 			String replace;
 
-			if(ArmouryMod.enableWeaponMaterialChanges){
+			if(ArmouryModMain.enableWeaponMaterialChanges){
                 Util.setReason("Enable weapon material damage modifications.");
                 CtClass ctWeapon = classPool.get("com.wurmonline.server.combat.Weapon");
                 replace = "{"
