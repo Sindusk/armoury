@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class WeaponTweaks {
-	public static Logger logger = Logger.getLogger(WeaponTweaks.class.getName());
+public class WeaponsTweaks {
+	public static Logger logger = Logger.getLogger(WeaponsTweaks.class.getName());
 
 	public static Map<Integer, Weapon> weapons; // Mirror of the Weapon class map
 
@@ -28,7 +28,7 @@ public class WeaponTweaks {
 
 	public static double newGetMaterialDamageBonus(byte material){
 	    if(materialWeaponDamage.containsKey(material)){
-	        //logger.info(String.format("Modifying damage by %.2f%% due to material type %s.", materialWeaponDamage.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+	        //logger.info(String.format("Modifying damage by %.2f%% due to material type %s.", materialWeaponDamage.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
 	        return materialWeaponDamage.get(material);
         }
         return 1.0d;
@@ -46,7 +46,7 @@ public class WeaponTweaks {
                 byte material = weapon.getMaterial();
                 if(materialWeaponSpeed.containsKey(material)){
                     speed *= materialWeaponSpeed.get(material);
-                    //logger.info(String.format("Found material %s, modifying speed by %.2f%%. New speed: %s", MaterialTweaks.getMaterialName(material), materialWeaponSpeed.get(material)*100f, speed));
+                    //logger.info(String.format("Found material %s, modifying speed by %.2f%%. New speed: %s", MaterialsTweaks.getMaterialName(material), materialWeaponSpeed.get(material)*100f, speed));
                 }
                 return speed;
             } catch (IllegalAccessException | NoSuchFieldException e) {
@@ -61,7 +61,7 @@ public class WeaponTweaks {
 
     public static float newGetMaterialParryBonus(byte material){
 	    if(materialWeaponParry.containsKey(material)){
-            //logger.info(String.format("Modifying parry by %.2f%% due to material type %s.", materialWeaponParry.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying parry by %.2f%% due to material type %s.", materialWeaponParry.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialWeaponParry.get(material);
         }
         return 1.0f;
@@ -69,7 +69,7 @@ public class WeaponTweaks {
 
     public static double newGetMaterialArmourDamageBonus(byte material){
 	    if(materialWeaponArmourDamage.containsKey(material)){
-            //logger.info(String.format("Modifying armour damage by %.2f%% due to material type %s.", materialWeaponArmourDamage.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying armour damage by %.2f%% due to material type %s.", materialWeaponArmourDamage.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialWeaponArmourDamage.get(material);
         }
 	    return 1.0d;
@@ -365,32 +365,32 @@ public class WeaponTweaks {
 	public static void preInit(){
 		try {
 			ClassPool classPool = HookManager.getInstance().getClassPool();
-			final Class<WeaponTweaks> thisClass = WeaponTweaks.class;
+			final Class<WeaponsTweaks> thisClass = WeaponsTweaks.class;
 			String replace;
 
 			if(ArmouryModMain.enableWeaponMaterialChanges){
                 Util.setReason("Enable weapon material damage modifications.");
                 CtClass ctWeapon = classPool.get("com.wurmonline.server.combat.Weapon");
                 replace = "{"
-                        + "  return "+WeaponTweaks.class.getName()+".newGetMaterialDamageBonus($1);"
+                        + "  return "+WeaponsTweaks.class.getName()+".newGetMaterialDamageBonus($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctWeapon, "getMaterialDamageBonus", replace);
 
                 Util.setReason("Enable weapon material speed modifications.");
                 replace = "{"
-                        + "  return "+WeaponTweaks.class.getName()+".newGetBaseSpeedForWeapon($1);"
+                        + "  return "+WeaponsTweaks.class.getName()+".newGetBaseSpeedForWeapon($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctWeapon, "getBaseSpeedForWeapon", replace);
 
                 Util.setReason("Enable weapon material parry modifications.");
                 replace = "{"
-                        + "  return "+WeaponTweaks.class.getName()+".newGetMaterialParryBonus($1);"
+                        + "  return "+WeaponsTweaks.class.getName()+".newGetMaterialParryBonus($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctWeapon, "getMaterialParryBonus", replace);
 
                 Util.setReason("Enable weapon material armour damage modifications.");
                 replace = "{"
-                        + "  return "+WeaponTweaks.class.getName()+".newGetMaterialArmourDamageBonus($1);"
+                        + "  return "+WeaponsTweaks.class.getName()+".newGetMaterialArmourDamageBonus($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctWeapon, "getMaterialArmourDamageBonus", replace);
 			}
@@ -401,7 +401,7 @@ public class WeaponTweaks {
 	
 	public static void onServerStarted(){
 		try {
-			logger.info("Beginning WeaponTweaks initialization...");
+			logger.info("Beginning WeaponsTweaks initialization...");
 			weapons = ReflectionUtil.getPrivateField(Weapon.class, ReflectionUtil.getField(Weapon.class, "weapons"));
 			
 			//printWeapons(); // For debugging/information purposes

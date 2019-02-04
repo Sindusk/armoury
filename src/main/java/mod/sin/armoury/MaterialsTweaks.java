@@ -16,9 +16,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-public class MaterialTweaks {
-    public static Logger logger = Logger.getLogger(MaterialTweaks.class.getName());
+public class MaterialsTweaks {
+    public static Logger logger = Logger.getLogger(MaterialsTweaks.class.getName());
 
+    // Material Modifier Maps
+    public static HashMap<Byte, Float> materialDamageReduction = new HashMap<>();
+    public static HashMap<Byte, Float> materialMovementModifier = new HashMap<>();
     public static HashMap<Byte, Float> materialDamageModifier = new HashMap<>();
     public static HashMap<Byte, Float> materialDecayModifier = new HashMap<>();
     public static HashMap<Byte, Float> materialCreationBonus = new HashMap<>();
@@ -34,10 +37,26 @@ public class MaterialTweaks {
     public static HashMap<Byte, Double> materialDifficultyModifier = new HashMap<>();
     public static HashMap<Byte, Double> materialActionSpeedModifier = new HashMap<>();
 
+    public static float newGetMaterialDamageReduction(byte material){
+        if(materialDamageReduction.containsKey(material)){
+            //logger.info(String.format("Modifying damage by %.2f%% due to material type %s.", materialDamageModifier.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
+            return materialDamageReduction.get(material);
+        }
+        return 0.0f;
+    }
+
+    public static float newGetMaterialMovementModifier(byte armourMaterial){
+        if(materialMovementModifier.containsKey(armourMaterial)){
+            //logger.info(String.format("Adjusting movement speed to %.2f%% because of material %s", materialMovementModifier.get(armourMaterial)*100f, armourMaterial));
+            return materialMovementModifier.get(armourMaterial);
+        }
+        return 1.0f;
+    }
+
     public static float newGetMaterialDamageModifier(Item item){
         byte material = item.getMaterial();
         if(materialDamageModifier.containsKey(material)){
-            //logger.info(String.format("Modifying damage by %.2f%% due to material type %s.", materialDamageModifier.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying damage by %.2f%% due to material type %s.", materialDamageModifier.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialDamageModifier.get(material);
         }
         return 1.0f;
@@ -46,7 +65,7 @@ public class MaterialTweaks {
     public static float newGetMaterialDecayModifier(Item item){
         byte material = item.getMaterial();
         if(materialDecayModifier.containsKey(material)){
-            //logger.info(String.format("Modifying decay by %.2f%% due to material type %s.", materialDecayModifier.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying decay by %.2f%% due to material type %s.", materialDecayModifier.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialDecayModifier.get(material);
         }
         return 1.0f;
@@ -54,7 +73,7 @@ public class MaterialTweaks {
 
     public static float newGetMaterialCreationBonus(byte material){
         if(materialCreationBonus.containsKey(material)){
-            //logger.info(String.format("Modifying creation bonus by %.2f%% due to material type %s.", materialCreationBonus.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying creation bonus by %.2f%% due to material type %s.", materialCreationBonus.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialCreationBonus.get(material);
         }
         return 0.0f;
@@ -63,7 +82,7 @@ public class MaterialTweaks {
     public static float newGetMaterialImpBonus(Item item){
         byte material = item.getMaterial();
         if(materialImproveBonus.containsKey(material)){
-            //logger.info(String.format("Modifying improve bonus by %.2f%% due to material type %s.", materialImproveBonus.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying improve bonus by %.2f%% due to material type %s.", materialImproveBonus.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialImproveBonus.get(material);
         }
         return 1.0f;
@@ -71,7 +90,7 @@ public class MaterialTweaks {
 
     public static float newGetMaterialShatterMod(byte material){
         if(materialShatterResistance.containsKey(material)){
-            //logger.info(String.format("Modifying shatter resistance by %.2f%% due to material type %s.", materialShatterResistance.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying shatter resistance by %.2f%% due to material type %s.", materialShatterResistance.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialShatterResistance.get(material);
         }
         return 0.0f;
@@ -79,7 +98,7 @@ public class MaterialTweaks {
 
     public static float newGetMaterialLockpickBonus(byte material){
         if(materialLockpickBonus.containsKey(material)){
-            //logger.info(String.format("Modifying lockpick bonus by %.2f%% due to material type %s.", materialLockpickBonus.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying lockpick bonus by %.2f%% due to material type %s.", materialLockpickBonus.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialLockpickBonus.get(material);
         }
         return 0.0f;
@@ -87,7 +106,7 @@ public class MaterialTweaks {
 
     public static float newGetMaterialAnchorBonus(byte material){
         if(materialAnchorBonus.containsKey(material)){
-            //logger.info(String.format("Modifying anchor bonus by %.2f%% due to material type %s.", materialAnchorBonus.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying anchor bonus by %.2f%% due to material type %s.", materialAnchorBonus.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialAnchorBonus.get(material);
         }
         return 1.0f;
@@ -95,7 +114,7 @@ public class MaterialTweaks {
 
     public static float newGetMaterialPendulumModifier(byte material){
         if(materialPendulumEffect.containsKey(material)){
-            //logger.info(String.format("Modifying pendulum effect by %.2f%% due to material type %s.", materialPendulumEffect.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying pendulum effect by %.2f%% due to material type %s.", materialPendulumEffect.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialPendulumEffect.get(material);
         }
         return 1.0f;
@@ -104,7 +123,7 @@ public class MaterialTweaks {
     public static float newGetMaterialRepairTimeMod(Item item){
         byte material = item.getMaterial();
         if(materialRepairSpeed.containsKey(material)){
-            //logger.info(String.format("Modifying repair speed by %.2f%% due to material type %s.", materialRepairSpeed.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying repair speed by %.2f%% due to material type %s.", materialRepairSpeed.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialRepairSpeed.get(material);
         }
         return 1.0f;
@@ -112,7 +131,7 @@ public class MaterialTweaks {
 
     public static double newGetMaterialBashModifier(byte material){
         if(materialBashModifier.containsKey(material)){
-            //logger.info(String.format("Modifying bash by %.2f%% due to material type %s.", materialBashModifier.get(material)*100d, MaterialTweaks.getMaterialName(material)));
+            //logger.info(String.format("Modifying bash by %.2f%% due to material type %s.", materialBashModifier.get(material)*100d, MaterialsTweaks.getMaterialName(material)));
             return materialBashModifier.get(material);
         }
         return 1.0f;
@@ -127,11 +146,11 @@ public class MaterialTweaks {
                 byte material = item.getMaterial();
                 if(materialSpellEffectModifier.containsKey(material)) {
                     newPower *= materialSpellEffectModifier.get(material);
-                    //logger.info(String.format("Modifying spell power by %.2f%% due to material type %s. [%s]", materialSpellEffectModifier.get(material) * 100d, MaterialTweaks.getMaterialName(material), newPower));
+                    //logger.info(String.format("Modifying spell power by %.2f%% due to material type %s. [%s]", materialSpellEffectModifier.get(material) * 100d, MaterialsTweaks.getMaterialName(material), newPower));
                 }
                 if(materialSpecificSpellEffectModifier.containsKey(material) && materialSpecificSpellEffectModifier.get(material).containsKey(aEnchantment)) {
                     newPower *= materialSpecificSpellEffectModifier.get(material).get(aEnchantment);
-                    //logger.info(String.format("Modifying spell power of enchant %s by %.2f%% due to material type %s. [%s]", aEnchantment, materialSpecificSpellEffectModifier.get(material).get(aEnchantment) * 100d, MaterialTweaks.getMaterialName(material), newPower));
+                    //logger.info(String.format("Modifying spell power of enchant %s by %.2f%% due to material type %s. [%s]", aEnchantment, materialSpecificSpellEffectModifier.get(material).get(aEnchantment) * 100d, MaterialsTweaks.getMaterialName(material), newPower));
                 }
                 return newPower;
             }
@@ -144,7 +163,7 @@ public class MaterialTweaks {
             byte material = item.getMaterial();
             if(materialDifficultyModifier.containsKey(material)){
                 diff *= materialDifficultyModifier.get(material);
-                //logger.info(String.format("Modifying difficulty by %.2f%% due to material type %s. [%s]", materialDifficultyModifier.get(material) * 100d, MaterialTweaks.getMaterialName(material), diff));
+                //logger.info(String.format("Modifying difficulty by %.2f%% due to material type %s. [%s]", materialDifficultyModifier.get(material) * 100d, MaterialsTweaks.getMaterialName(material), diff));
             }
         }
         return diff;
@@ -154,11 +173,19 @@ public class MaterialTweaks {
         if(item != null){
             byte material = item.getMaterial();
             if(materialActionSpeedModifier.containsKey(material)){
-                //logger.info(String.format("Modifying action speed by %.2f%% due to material type %s.", materialActionSpeedModifier.get(material) * 100d, MaterialTweaks.getMaterialName(material)));
+                //logger.info(String.format("Modifying action speed by %.2f%% due to material type %s.", materialActionSpeedModifier.get(material) * 100d, MaterialsTweaks.getMaterialName(material)));
                 return materialActionSpeedModifier.get(material);
             }
         }
         return 1.0f;
+    }
+
+    public static void addMaterialDamageReduction(byte material, float reduction){
+        materialDamageReduction.put(material, reduction);
+    }
+
+    public static void addMaterialMovementModifier(byte material, float speed){
+        materialMovementModifier.put(material, speed);
     }
 
     public static void addMaterialDamageModifier(byte material, float mult){
@@ -263,6 +290,32 @@ public class MaterialTweaks {
     }
 
     protected static void initializeMaterialMaps(){
+        // Material damage reduction modifiers
+        materialDamageReduction.put(Materials.MATERIAL_GOLD, -0.01f);
+        materialDamageReduction.put(Materials.MATERIAL_SILVER, -0.0075f);
+        materialDamageReduction.put(Materials.MATERIAL_STEEL, 0.025f);
+        materialDamageReduction.put(Materials.MATERIAL_COPPER, -0.01f);
+        materialDamageReduction.put(Materials.MATERIAL_IRON, 0.0f);
+        materialDamageReduction.put(Materials.MATERIAL_LEAD, -0.025f);
+        materialDamageReduction.put(Materials.MATERIAL_ZINC, -0.02f);
+        materialDamageReduction.put(Materials.MATERIAL_BRASS, 0.01f);
+        materialDamageReduction.put(Materials.MATERIAL_BRONZE, 0.01f);
+        materialDamageReduction.put(Materials.MATERIAL_TIN, -0.0175f);
+        materialDamageReduction.put(Materials.MATERIAL_ADAMANTINE, 0.05f);
+        materialDamageReduction.put(Materials.MATERIAL_GLIMMERSTEEL, 0.05f);
+        materialDamageReduction.put(Materials.MATERIAL_SERYLL, 0.05f);
+
+        // Material movement modifiers
+        materialMovementModifier.put(Materials.MATERIAL_ADAMANTINE, 0.95f);
+        materialMovementModifier.put(Materials.MATERIAL_COPPER, 0.99f);
+        materialMovementModifier.put(Materials.MATERIAL_GLIMMERSTEEL, 0.90f);
+        materialMovementModifier.put(Materials.MATERIAL_GOLD, 1.05f);
+        materialMovementModifier.put(Materials.MATERIAL_LEAD, 1.025f);
+        materialMovementModifier.put(Materials.MATERIAL_SERYLL, 0.90f);
+        materialMovementModifier.put(Materials.MATERIAL_SILVER, 1.02f);
+        materialMovementModifier.put(Materials.MATERIAL_TIN, 0.98f);
+        materialMovementModifier.put(Materials.MATERIAL_ZINC, 0.975f);
+
         // Material damage taken modifiers
         materialDamageModifier.put(Materials.MATERIAL_ADAMANTINE, 0.40f);
         materialDamageModifier.put(Materials.MATERIAL_BRASS, 0.95f);
@@ -382,94 +435,107 @@ public class MaterialTweaks {
     public static void preInit(){
         try {
             ClassPool classPool = HookManager.getInstance().getClassPool();
-            final Class<MaterialTweaks> thisClass = MaterialTweaks.class;
+            final Class<MaterialsTweaks> thisClass = MaterialsTweaks.class;
             String replace;
 
             if(ArmouryModMain.enableItemMaterialChanges){
+                Util.setReason("Enable material damage reduction modifications.");
+                CtClass ctArmourTemplate = classPool.get("com.wurmonline.server.combat.ArmourTemplate");
+                replace = "{"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialDamageReduction($1);"
+                        + "}";
+                Util.setBodyDeclared(thisClass, ctArmourTemplate, "getArmourMatBonus", replace);
+
+                Util.setReason("Enable material movement modifications.");
+                replace = "{"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialMovementModifier($1);"
+                        + "}";
+                Util.setBodyDeclared(thisClass, ctArmourTemplate, "getMaterialMovementModifier", replace);
+
                 Util.setReason("Enable material damage taken modifications.");
                 CtClass ctItem = classPool.get("com.wurmonline.server.items.Item");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialDamageModifier($0);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialDamageModifier($0);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getMaterialDamageModifier", replace);
 
                 Util.setReason("Enable material decay modifications.");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialDecayModifier($0);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialDecayModifier($0);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getMaterialDecayModifier", replace);
 
                 Util.setReason("Enable material creation bonus modifications.");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialCreationBonus($1);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialCreationBonus($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getMaterialCreationBonus", replace);
 
                 Util.setReason("Enable material improvement bonus modifications.");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialImpBonus($0);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialImpBonus($0);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getMaterialImpBonus", replace);
 
                 Util.setReason("Enable material shatter resistance modifications.");
                 CtClass ctSpell = classPool.get("com.wurmonline.server.spells.Spell");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialShatterMod($1);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialShatterMod($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctSpell, "getMaterialShatterMod", replace);
 
                 Util.setReason("Enable material lockpick bonus modifications.");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialLockpickBonus($1);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialLockpickBonus($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getMaterialLockpickBonus", replace);
 
                 Util.setReason("Enable material anchor bonus modifications.");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialAnchorBonus($1);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialAnchorBonus($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getMaterialAnchorBonus", replace);
 
                 Util.setReason("Enable material pendulum effect modifications.");
                 CtClass ctLocates = classPool.get("com.wurmonline.server.behaviours.Locates");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialPendulumModifier($1);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialPendulumModifier($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctLocates, "getMaterialPendulumModifier", replace);
 
                 Util.setReason("Enable material repair speed modifications.");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialRepairTimeMod($0);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialRepairTimeMod($0);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getMaterialRepairTimeMod", replace);
 
                 Util.setReason("Enable material bash modifications.");
                 CtClass ctWeapon = classPool.get("com.wurmonline.server.combat.Weapon");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetMaterialBashModifier($1);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetMaterialBashModifier($1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctWeapon, "getMaterialBashModifier", replace);
 
                 Util.setReason("Enable material spell power modifications.");
                 replace = "{"
-                        + "  return "+MaterialTweaks.class.getName()+".newGetBonusForSpellEffect($0, $1);"
+                        + "  return "+MaterialsTweaks.class.getName()+".newGetBonusForSpellEffect($0, $1);"
                         + "}";
                 Util.setBodyDeclared(thisClass, ctItem, "getBonusForSpellEffect", replace);
 
                 Util.setReason("Enable material skill difficulty modifications.");
                 CtClass ctSkill = classPool.get("com.wurmonline.server.skills.Skill");
-                replace = "$1 = "+MaterialTweaks.class.getName()+".getNewDifficulty(this, $1, $2);";
+                replace = "$1 = "+MaterialsTweaks.class.getName()+".getNewDifficulty(this, $1, $2);";
                 Util.insertBeforeDeclared(thisClass, ctSkill, "checkAdvance", replace);
 
                 Util.setReason("Enable material action speed modifications.");
                 CtClass ctActions = classPool.get("com.wurmonline.server.behaviours.Actions");
-                replace = "$_ = $proceed($$)*"+MaterialTweaks.class.getName()+".getMaterialSpeedModifier(source);";
+                replace = "$_ = $proceed($$)*"+MaterialsTweaks.class.getName()+".getMaterialSpeedModifier(source);";
                 Util.instrumentDeclared(thisClass, ctActions, "getStandardActionTime", "getStaminaModiferFor", replace);
                 Util.instrumentDeclared(thisClass, ctActions, "getQuickActionTime", "getStaminaModiferFor", replace);
                 Util.instrumentDeclared(thisClass, ctActions, "getVariableActionTime", "getStaminaModiferFor", replace);
                 Util.instrumentDeclared(thisClass, ctActions, "getSlowActionTime", "getStaminaModiferFor", replace);
                 Util.instrumentDeclared(thisClass, ctActions, "getPickActionTime", "getStaminaModiferFor", replace);
-                replace = "$_ = $proceed($$)*"+MaterialTweaks.class.getName()+".getMaterialSpeedModifier(realSource);";
+                replace = "$_ = $proceed($$)*"+MaterialsTweaks.class.getName()+".getMaterialSpeedModifier(realSource);";
                 Util.instrumentDeclared(thisClass, ctActions, "getItemCreationTime", "getStaminaModiferFor", replace);
             }
         } catch (NotFoundException e) {

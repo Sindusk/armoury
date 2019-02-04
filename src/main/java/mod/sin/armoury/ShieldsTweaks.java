@@ -16,8 +16,8 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
-public class ShieldTweaks {
-	public static Logger logger = Logger.getLogger(ShieldTweaks.class.getName());
+public class ShieldsTweaks {
+	public static Logger logger = Logger.getLogger(ShieldsTweaks.class.getName());
 
 	public static boolean checkShieldSpeed(Item shield){
         if ((shield != null)) {
@@ -59,17 +59,17 @@ public class ShieldTweaks {
 	public static void preInit(){
         try {
         	ClassPool classPool = HookManager.getInstance().getClassPool();
-        	Class<ShieldTweaks> thisClass = ShieldTweaks.class;
+        	Class<ShieldsTweaks> thisClass = ShieldsTweaks.class;
         	if(ArmouryModMain.enableShieldDamageEnchants){
         		CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
-        		String replace = ShieldTweaks.class.getName()+".doSharedPain(this.creature, defender, defShield);"
+        		String replace = ShieldsTweaks.class.getName()+".doSharedPain(this.creature, defender, defShield);"
 	            		+ "$_ = $proceed($$);";
         		Util.setReason("Enable shield damage enchants.");
         		Util.instrumentDeclared(thisClass, ctCombatHandler, "checkShield", "setDamage", replace);
 				/*ctCombatHandler.getDeclaredMethod("checkShield").instrument(new ExprEditor(){
 				    public void edit(MethodCall m) throws CannotCompileException {
 				        if (m.getMethodName().equals("setDamage")) {
-				            m.replace(ShieldTweaks.class.getName()+".doSharedPain(this.creature, defender, defShield);"
+				            m.replace(ShieldsTweaks.class.getName()+".doSharedPain(this.creature, defender, defShield);"
 				            		+ "$_ = $proceed($$);");
 				            return;
 				        }
@@ -78,13 +78,13 @@ public class ShieldTweaks {
 			}
         	if(ArmouryModMain.enableShieldSpeedEnchants){
         		CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
-        		String insert = "if("+ShieldTweaks.class.getName()+".checkShieldSpeed(defender.getShield())){"
+        		String insert = "if("+ShieldsTweaks.class.getName()+".checkShieldSpeed(defender.getShield())){"
 						+ "  defender.getCombatHandler().usedShieldThisRound--;"
 						+ "}";
         		Util.setReason("Enable shield speed enchants.");
         		Util.insertBeforeDeclared(thisClass, ctCombatHandler, "checkShield", insert);
 				/*ctCombatHandler.getDeclaredMethod("checkShield").insertBefore(""
-						+ "if("+ShieldTweaks.class.getName()+".checkShieldSpeed(defender.getShield())){"
+						+ "if("+ShieldsTweaks.class.getName()+".checkShieldSpeed(defender.getShield())){"
 						+ "  defender.getCombatHandler().usedShieldThisRound--;"
 						+ "}");*/
         	}

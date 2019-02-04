@@ -10,7 +10,7 @@ import mod.sin.lib.Util;
 import org.gotti.wurmunlimited.modloader.ReflectionUtil;
 import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
 
-public class CombatTweaks {
+public class CombatsTweaks {
 	public static Item handleDualWieldAttack(CombatHandler handler, Creature opponent, float delta){
 		try {
 		Creature performer = ReflectionUtil.getPrivateField(handler, ReflectionUtil.getField(handler.getClass(), "creature"));
@@ -33,9 +33,10 @@ public class CombatTweaks {
 	public static void preInit(){
         try {
 			ClassPool classPool = HookManager.getInstance().getClassPool();
-			Class<CombatTweaks> thisClass = CombatTweaks.class;
+			Class<CombatsTweaks> thisClass = CombatsTweaks.class;
 	    	
 	        // - Allow critical hits on creatures as well as players -
+			/* [3.1] Disabled - No longer working properly.
 			ArmouryModMain.enableNonPlayerCrits = false; // Disabled for now as it's not working.
 			if(ArmouryModMain.enableNonPlayerCrits){
 		        CtClass ctCombatHandler = classPool.get("com.wurmonline.server.creatures.CombatHandler");
@@ -47,14 +48,7 @@ public class CombatTweaks {
 		        String desc = Descriptor.ofMethod(CtPrimitiveType.booleanType,  attackParams1);
 		        Util.setReason("Enable player critical strikes on creatures.");
 		        Util.instrumentDescribed(thisClass, ctCombatHandler, "attack", desc, "isPlayer", "$_ = true");
-				/*ctCombatHandler.getMethod("attack", Descriptor.ofMethod(CtPrimitiveType.booleanType, attackParams1)).instrument(new ExprEditor(){
-				    public void edit(MethodCall m) throws CannotCompileException {
-				        if (m.getMethodName().equals("isPlayer")) {
-				        	m.replace("$_ = true;");
-				            return;
-				        }
-				    }
-				});*/
+
 		        CtClass[] attackParams2 = {
 		        		classPool.get("com.wurmonline.server.creatures.Creature"),
 		        		classPool.get("com.wurmonline.server.creatures.AttackAction")
@@ -62,15 +56,7 @@ public class CombatTweaks {
 		        desc = Descriptor.ofMethod(CtPrimitiveType.booleanType,  attackParams2);
 		        Util.setReason("Enable player critical strikes on creatures.");
 		        Util.instrumentDescribed(thisClass, ctCombatHandler, "attack", desc, "isPlayer", "$_ = true");
-		        /*ctCombatHandler.getMethod("attack", Descriptor.ofMethod(CtPrimitiveType.booleanType, attackParams2)).instrument(new ExprEditor(){
-				    public void edit(MethodCall m) throws CannotCompileException {
-				        if (m.getMethodName().equals("isPlayer")) {
-				        	m.replace("$_ = true;");
-				            return;
-				        }
-				    }
-				});*/
-			}
+			}*/
 
 			// - Change the minimum swing timer - //
 			if(ArmouryModMain.minimumSwingTime != 3.0f){
@@ -143,7 +129,7 @@ public class CombatTweaks {
 				};
 				String desc = Descriptor.ofMethod(CtClass.booleanType, params1);
 				String replace = "if(this.creature.isPlayer()){"
-                		+ "  com.wurmonline.server.items.Item weapon = "+CombatTweaks.class.getName()+".handleDualWieldAttack(this, opponent, delta);"
+                		+ "  com.wurmonline.server.items.Item weapon = "+CombatsTweaks.class.getName()+".handleDualWieldAttack(this, opponent, delta);"
                 		+ "  if(weapon != null){"
                 		+ "    lDead = attack(opponent, weapon, true);"
                 		+ "  }"
@@ -155,7 +141,7 @@ public class CombatTweaks {
 		            public void edit(MethodCall m) throws CannotCompileException {
 		                if (m.getMethodName().equals("getSecondaryWeapons")) {
 		                    m.replace("if(this.creature.isPlayer()){"
-		                    		+ "  com.wurmonline.server.items.Item weapon = CombatTweaks.handleDualWieldAttack(this, opponent, delta);"
+		                    		+ "  com.wurmonline.server.items.Item weapon = CombatsTweaks.handleDualWieldAttack(this, opponent, delta);"
 		                    		+ "  if(weapon != null){"
 		                    		+ "    lDead = attack(opponent, weapon, true);"
 		                    		+ "  }"

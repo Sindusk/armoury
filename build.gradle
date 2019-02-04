@@ -1,17 +1,18 @@
 apply plugin: 'java'
 
 group "mod.sin"
-version "3.0"
+version "4.0"
 
 repositories {
     mavenCentral()
-    maven { url "http://gotti.no-ip.org/maven/repository" }
+    mavenLocal()
+    maven { url "https://dl.bdew.net/agorepo/" }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compile 'org.gotti.wurmunlimited:server-modlauncher:0.39-beta1'
-    compile 'com.github.Sindusk:sindusklibrary:v1.7'
+    compile 'org.gotti.wurmunlimited:server-modlauncher:0.40'
+    compile 'com.github.Sindusk:sindusklibrary:v2.1'
 }
 
 jar {
