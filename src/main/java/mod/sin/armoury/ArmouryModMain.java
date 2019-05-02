@@ -104,6 +104,11 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                             byte armourType = parseArmourType(split[0]);
                             String[] split2 = split[1].split(",");
                             ArmourTemplateTweaks.addArmourGlanceRate(armourType, split2);
+                        } else if (name.startsWith("armourLimitFactor")) {
+                            String[] split = value.split(",");
+                            byte armourType = parseArmourType(split[0]);
+                            float reduction = Float.parseFloat(split[1]);
+                            ArmourTemplateTweaks.addArmourLimitFactor(armourType, reduction);
                         } else if (name.startsWith("armourMovement")) {
                             String[] split = value.split(",");
                             String itemTemplate = split[0];
@@ -275,6 +280,10 @@ implements WurmServerMod, Configurable, PreInitable, ItemTemplatesCreatedListene
                 String wound = WoundAssist.getWoundName(woundType);
                 logger.info(String.format("Glance rate for armour %s against %s: %.2f%%", ArmourAssist.getArmourName(armourType), wound, woundMap.get(woundType)*100f));
             }
+        }
+        logger.info("> Armour Limit Factor Settings <");
+        for(byte armourType : ArmourTemplateTweaks.armourLimitFactors.keySet()){
+            logger.info(String.format("Limit factor for armour %s: %.2f%%", ArmourAssist.getArmourName(armourType), ArmourTemplateTweaks.armourLimitFactors.get(armourType)*100f));
         }
         logger.info("> Armour Movement Rate Changes <");
         for(String armourName : ArmourTemplateTweaks.armourMovement.keySet()){

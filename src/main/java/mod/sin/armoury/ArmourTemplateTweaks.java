@@ -5,6 +5,7 @@ import com.wurmonline.server.items.ItemTemplate;
 import com.wurmonline.server.items.ItemTemplateFactory;
 import mod.sin.lib.ArmourAssist;
 import mod.sin.lib.WoundAssist;
+import org.gotti.wurmunlimited.modloader.ReflectionUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class ArmourTemplateTweaks {
     public static HashMap<Byte, HashMap<Byte, Float>> armourEffectiveness = new HashMap<>();
     public static HashMap<Byte, HashMap<Byte, Float>> armourGlanceRates = new HashMap<>();
     public static HashMap<String, Float> armourMovement = new HashMap<>();
+    public static HashMap<Byte, Float> armourLimitFactors = new HashMap<>();
 
     protected static ArrayList<Byte> getWoundTypes(String[] split){
         ArrayList<Byte> woundTypes = new ArrayList<>();
@@ -85,6 +87,10 @@ public class ArmourTemplateTweaks {
         }
     }
 
+    public static void addArmourLimitFactor(byte armourType, float limitFactor){
+        armourLimitFactors.put(armourType, limitFactor);
+    }
+
     public static void addArmourMovement(String itemTemplateName, float movementPenalty){
         armourMovement.put(itemTemplateName, movementPenalty);
     }
@@ -119,6 +125,14 @@ public class ArmourTemplateTweaks {
                 // Obtain the ArmourTemplate instance based on the ItemTemplate
                 ArmourTemplate armourTemplate = ArmourTemplate.getArmourTemplate(template.getTemplateId());
                 armourTemplate.setMoveModifier(armourMovement.get(armourName)); // Set the new movement speed.
+            }
+            for (byte atype : armourLimitFactors.keySet()){
+                try {
+                    ArmourTemplate.ArmourType armourType = ArmourAssist.getArmourType(atype);
+                    ReflectionUtil.setPrivateField(armourType, ReflectionUtil.getField(armourType.getClass(), "limitFactor"), armourLimitFactors.get(atype));
+                } catch (IllegalAccessException | NoSuchFieldException e) {
+                    logger.warning("Failed to set armour limit factor for type "+atype);
+                }
             }
         }
     }
